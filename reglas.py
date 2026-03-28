@@ -1,10 +1,10 @@
 # reglas.py
 
 def es_web_alto_rendimiento(e):
-    return e["tipo"] == "web" and e["rendimiento"] == "alto"
+    return e["tipo_aplicacion"] == "web" and e["rendimiento"] == "alto"
 
 def es_movil_principiante(e):
-    return e["tipo"] == "movil" and e["experiencia"] == "principiante"
+    return e["tipo_aplicacion"] == "movil" and e["experiencia"] == "principiante"
 
 
 reglas = [
