@@ -3,10 +3,5 @@ from reglas import reglas
 
 agente = Agente(reglas)
 
-while True:
-    entrada = input("\nDescribe tu proyecto: ")
-
-    if entrada == "salir":
-        break
-
-    print(agente.actuar(entrada))
+entrada = input("\nDescribe tu proyecto: ")
+print(agente.actuar(entrada))
