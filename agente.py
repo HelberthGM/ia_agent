@@ -2,7 +2,7 @@ class Agente:
 
     def __init__(self, reglas):
         self.reglas = reglas
-     
+        self.historial = []  # para futuro (aprendizaje)
 
     def interpretar(self, percepcion):
         percepcion = percepcion.lower()
@@ -14,23 +14,31 @@ class Agente:
             "restricciones": []
         }
 
-        # Tipo de aplicación
         if "web" in percepcion:
             estado["tipo_aplicacion"] = "web"
         elif "movil" in percepcion:
             estado["tipo_aplicacion"] = "movil"
     
-        # Rendimiento
         if "alto rendimiento" in percepcion:
             estado["rendimiento"] = "alto"
     
-        # Experiencia
         if "principiante" in percepcion:
             estado["experiencia"] = "principiante"
-    
-        # Restricciones
+   
         if "poco presupuesto" in percepcion:
             estado["restricciones"].append("presupuesto_limitado")
+        
+        if "rapido" in percepcion or "mvp" in percepcion:
+            estado["tiempo"] = "corto"
+
+        if "escalable" in percepcion or "muchos usuarios" in percepcion:
+            estado["escalabilidad"] = "alta"
+
+        if "equipo pequeño" in percepcion:
+            estado["equipo_pequeno"] = True
+
+        if "complejo" in percepcion or "empresarial" in percepcion:
+            estado["complejidad"] = "alta"
         return estado
 
     def decidir(self, estado):
@@ -39,4 +47,10 @@ class Agente:
                  return f"Recomendación: {regla['accion']}"
         return "No tengo suficiente información"
 
- 
+    def actuar(self, percepcion):
+        estado = self.interpretar(percepcion)
+        accion = self.decidir(estado)
+
+        self.historial.append((estado, accion))  # memoria simple
+
+        return accion
