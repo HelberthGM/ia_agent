@@ -125,9 +125,9 @@ class Agente:
     
         accion = self.decidir(self.estado)
     
-        print("ANTES DE INFERIR:", self.estado.__dict__)
+        # print("ANTES DE INFERIR:", self.estado.__dict__)
         self.inferir()
-        print("DESPUES DE INFERIR:", self.estado.__dict__)
+        # print("DESPUES DE INFERIR:", self.estado.__dict__)
     
         self.validar()
         
@@ -161,7 +161,7 @@ class Agente:
         if self.estado.escalabilidad == "alta":
             self.estado.prioridad = "escalabilidad"
 
-        print("DEBUG estado:", self.estado.__dict__)
+        #print("DEBUG estado:", self.estado.__dict__)
         return self.estado
     
     def validar(self):
