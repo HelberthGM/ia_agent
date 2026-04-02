@@ -4,31 +4,37 @@ from conocimiento.datos.datos_tech import TECNOLOGIAS
 PALABRAS_CLAVE = {
     "tipo_aplicacion": {
         "web": ["web", "pagina", "sitio"],
-        "movil": ["movil", "app", "android", "ios"]
+        "movil": ["movil", "app", "android", "ios"],
     },
     "experiencia": {
-        "principiante": ["principiante", "novato"]
+        "principiante": ["principiante", "novato"],
+        "avanzado": ["avanzado", "experto"]
     },
     "rendimiento": {
-        "alto": ["alto rendimiento", "alto desempeño"]
+        "alto": ["alto rendimiento", "alto desempeño"],
+        "bajo": ["bajo rendimiento", "lento"]
     },
     "tiempo": {
-        "corto": ["rapido", "mvp"]
+        "corto": ["rapido", "mvp"],
+        "largo": ["lento", "no es urgente"]
     },
     "escalabilidad": {
-        "alta": ["escalable", "muchos usuarios"]
+        "alta": ["escalable", "muchos usuarios"],
+        "baja": ["no escalable", "pocos usuarios"]
     },
     "tamanio_equipo": {
-        "pequeno": ["equipo pequeño", "pocos desarrolladores"]
+        "pequeno": ["equipo pequeño", "pocos desarrolladores"],
+        "grande": ["equipo grande", "muchos desarrolladores"]
     },
     "complejidad": {
-        "alta": ["complejo", "empresarial"]
+        "alta": ["complejo", "empresarial"],
+        "baja": ["simple", "pequeño proyecto"]
     }
 }
 
 class Agente:
 
-    def __init__(self, reglas):
+    def __init__(self):
         self.estado = Estado()
         # self.historial = []  # para futuro (aprendizaje)
 
@@ -60,6 +66,8 @@ class Agente:
         restricciones = []
         if "poco presupuesto" in texto:
             restricciones.append("presupuesto_limitado")
+        elif "mucho presupuesto" in texto:
+            restricciones.append("presupuesto_amplio")
     
         if restricciones:
             percepcion_dict["restricciones"] = restricciones
@@ -67,19 +75,27 @@ class Agente:
         # Tiempo
         if "rapido" in texto or "mvp" in texto:
             percepcion_dict["tiempo"] = "corto"
+        elif "lento" in texto or "no es urgente" in texto:
+            percepcion_dict["tiempo"] = "largo"
     
         # Escalabilidad
         if "escalable" in texto or "muchos usuarios" in texto:
             percepcion_dict["escalabilidad"] = "alta"
+        elif "no escalable" in texto or "pocos usuarios" in texto:
+            percepcion_dict["escalabilidad"] = "baja"
     
         # Equipo
         if "equipo pequeño" in texto:
-            percepcion_dict["equipo_pequeno"] = True
+            percepcion_dict["tamanio_equipo"] = "pequeno"
+        elif "equipo grande" in texto:
+            percepcion_dict["tamanio_equipo"] = "grande"
     
         # Complejidad
         if "complejo" in texto or "empresarial" in texto:
             percepcion_dict["complejidad"] = "alta"
-    
+        elif "simple" in texto or "pequeño proyecto" in texto:
+            percepcion_dict["complejidad"] = "baja"
+
         return percepcion_dict
 
     def decidir(self, estado):
@@ -104,18 +120,17 @@ class Agente:
     def actuar(self, entrada):
 
         percepcion = self.interpretar(entrada)
-
-        if percepcion.get("tipo_aplicacion"):
-            self.estado.tipo_aplicacion = percepcion["tipo_aplicacion"]
-
+    
+        self.actualizar_estado(percepcion)
+    
         accion = self.decidir(self.estado)
-
-        if accion == "inferir_stack":
-            self.inferir()
-
-        elif accion == "validar":
-            self.validar()
-
+    
+        print("ANTES DE INFERIR:", self.estado.__dict__)
+        self.inferir()
+        print("DESPUES DE INFERIR:", self.estado.__dict__)
+    
+        self.validar()
+        
         return self.estado
     
     def actualizar_estado(self, percepcion_dict):
@@ -146,11 +161,16 @@ class Agente:
         if self.estado.escalabilidad == "alta":
             self.estado.prioridad = "escalabilidad"
 
+        print("DEBUG estado:", self.estado.__dict__)
         return self.estado
     
     def validar(self):
         for tech_name in self.estado.stack:
             tech = TECNOLOGIAS.get(tech_name)
+
+            if tech is None:
+                print(f"⚠ Tecnología no registrada: {tech_name}")
+                continue  
     
             # validar incompatibilidades
             for incompatible in tech.incompatible_con:
@@ -160,15 +180,43 @@ class Agente:
             # validar requerimientos
             for req in tech.requiere:
                 if req not in self.estado.stack:
-                    print(f"⚠ {tech_name} requiere {req}")
+                    print(f"⚠ {tech_name} requiere {req} (resolviendo automáticamente)")
+
         self.estado.validado = True
 
     def inferir(self):
 
+        # Defaults
+        if self.estado.prioridad is None:
+            self.estado.prioridad = "rapidez"
+
         if self.estado.tipo_aplicacion == "web":
 
+            # Elegir arquitectura
             if self.estado.prioridad == "rapidez":
-                self.estado.stack = ["React", "Node.js", "Firebase"]
+                self.estado.arquitectura = "SPA"
 
             elif self.estado.escalabilidad == "alta":
-                self.estado.stack = ["React", "Node.js", "PostgreSQL"]
+                self.estado.arquitectura = "SSR"
+
+            # Generar stack coherente
+            if self.estado.arquitectura == "SPA":
+                self.estado.stack = ["React", "Node.js", "Firebase"]
+
+            elif self.estado.arquitectura == "SSR":
+                self.estado.stack = ["Next.js", "Node.js", "PostgreSQL"]
+
+        elif self.estado.tipo_aplicacion == "movil":
+
+            if self.estado.prioridad == "rapidez":
+                self.estado.stack = ["Flutter"]
+
+            elif self.estado.escalabilidad == "alta":
+                self.estado.stack = ["React Native", "Node.js", "MongoDB"]
+    
+    def mostrar_recomendacion(self):
+        if not self.estado.stack:
+            print("⚠ No tengo suficiente información, usando valores por defecto")
+        return (
+            f"\n🚀 Recomendación:\n Arquitectura: {self.estado.arquitectura}\n Stack: {' + '.join(self.estado.stack)}\n Prioridad: {self.estado.prioridad}\n"
+        )
