@@ -1,22 +1,52 @@
 # Agente Inteligente para Selección de Stack Tecnológico
 
-Este proyecto implementa un agente reactivo simple basado en el modelo propuesto en
-Artificial Intelligence: A Modern Approach.
+### 📌 Acceso rápido a las versiones
 
-El agente recibe una descripción en lenguaje natural de un proyecto de software y recomienda un stack tecnológico mediante un sistema de reglas condición → acción.
+Puedes explorar las diferentes implementaciones del agente directamente en sus respectivas ramas:
 
-El objetivo es demostrar cómo formalizar la toma de decisiones en ingeniería de software utilizando conceptos fundamentales de Inteligencia Artificial:
+  * 🔗 **[Agente Reactivo Simple](https://github.com/HelberthGM/ia_agent/tree/agente_reactivo_simple)**: Implementación basada en reglas directas de condición-acción.
+  * 🔗 **[Agente Basado en Modelos](https://github.com/HelberthGM/ia_agent/tree/agente-reactivo-modelos)**: Versión que incorpora un estado interno para manejar entornos con visibilidad parcial.
 
-Agentes inteligentes
-Representación del conocimiento
-Sistemas basados en reglas
+-----
 
-## Ejecución
-1. Clonar repositorio
-`git clone <repo>`
-`cd agente-ia`
-2. Ejecutar
-`python main.py`
+## 📖 Descripción
+
+Este repositorio contiene el desarrollo de agentes inteligentes diseñados para operar en entornos simulados. El objetivo es comparar el desempeño de un agente que solo reacciona al presente frente a uno que mantiene memoria de sus acciones y del entorno.
+
+## 🛠️ Requisitos
+
+  * Python 3.10+
+  * Entorno virtual (recomendado)
+  * Dependencias listadas en `requirements.txt`
+
+## 🚀 Ejecución
+
+Para ejecutar el proyecto, primero clona el repositorio y muévete a la rama que desees probar:
+
+1.  **Clonar el repositorio:**
+
+    ```bash
+    git clone https://github.com/HelberthGM/ia_agent.git
+    cd ia_agent
+    ```
+
+2.  **Cambiar a una rama específica:**
+
+    ```bash
+    # Para el agente simple
+    git checkout agente_reactivo_simple
+
+    # O para el agente basado en modelos
+    git checkout agente-reactivo-modelos
+    ```
+
+3.  **Instalar dependencias y correr:**
+
+    ```bash
+    pip install -r requirements.txt
+    python main.py
+    ```
+-----
 ## Ejemplo de uso
 Entrada:
 "Aplicación web con alto rendimiento y bajo presupuesto"
