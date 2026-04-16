@@ -186,37 +186,119 @@ class Agente:
 
     def inferir(self):
 
-        # Defaults
-        if self.estado.prioridad is None:
-            self.estado.prioridad = "rapidez"
+        stacks = self.generar_stacks(self.estado)
 
-        if self.estado.tipo_aplicacion == "web":
+        stacks_validos = []
 
-            # Elegir arquitectura
-            if self.estado.prioridad == "rapidez":
-                self.estado.arquitectura = "SPA"
+        for stack in stacks:
+            try:
+                self.estado.stack = stack
+                self.estado.validado = False
+                self.validar()
+                stacks_validos.append(stack)
+            except:
+                continue  # descartar inválidos
 
-            elif self.estado.escalabilidad == "alta":
-                self.estado.arquitectura = "SSR"
+        # evaluar todos
+        stacks_evaluados = []
 
-            # Generar stack coherente
-            if self.estado.arquitectura == "SPA":
-                self.estado.stack = ["React", "Node.js", "Firebase"]
+        for stack in stacks_validos:
+            score = self.evaluar_stack(stack, self.estado)
+            stacks_evaluados.append((stack, score))
 
-            elif self.estado.arquitectura == "SSR":
-                self.estado.stack = ["Next.js", "Node.js", "PostgreSQL"]
+        # ordenar por score
+        stacks_evaluados.sort(key=lambda x: x[1], reverse=True)
 
-        elif self.estado.tipo_aplicacion == "movil":
+        if stacks_evaluados:
+            mejor_stack = stacks_evaluados[0][0]
+            self.estado.stack = mejor_stack
+            self.estado.validado = True
+        else:
+            self.estado.stack = ["React", "Node.js", "Firebase"]  # fallback
+        
+    def evaluar_stack(self,stack, estado):
+        score = 0
 
-            if self.estado.prioridad == "rapidez":
-                self.estado.stack = ["Flutter"]
+        techs = [TECNOLOGIAS[t] for t in stack]
 
-            elif self.estado.escalabilidad == "alta":
-                self.estado.stack = ["React Native", "Node.js", "MongoDB"]
+        # escalabilidad
+        if estado.escalabilidad == "alta":
+            if any("Spring Boot" == t.nombre for t in techs):
+                score += 2
+            if any("PostgreSQL" == t.nombre for t in techs):
+                score += 2
+
+        # rapidez
+        if estado.tiempo == "corto":
+            if any("Firebase" == t.nombre for t in techs):
+                score += 2
+            if any("React" == t.nombre for t in techs):
+                score += 1
+
+        # equipo pequeño
+        if estado.tamanio_equipo == "pequeno":
+            if any("Firebase" == t.nombre for t in techs):
+                score += 2
+
+        # restricciones
+        if "presupuesto_limitado" in self.estado.restricciones:
+            if any("PostgreSQL" == t.nombre for t in techs):
+                score -= 1
+
+        return score
+    
+    def generar_stacks(self, estado):
+        frontends = []
+        backends = []
+        dbs = []
+
+        # separar tecnologías por tipo
+        for tech in TECNOLOGIAS.values():
+            if tech.tipo == "frontend":
+                frontends.append(tech.nombre)
+            elif tech.tipo == "backend":
+                backends.append(tech.nombre)
+            elif tech.tipo == "database":
+                dbs.append(tech.nombre)
+
+        stacks = []
+
+        # generar combinaciones
+        for f in frontends:
+            for b in backends:
+                for d in dbs:
+                    stack = [f, b, d]
+                    stacks.append(stack)
+
+        return stacks
     
     def mostrar_recomendacion(self):
         if not self.estado.stack:
-            print("⚠ No tengo suficiente información, usando valores por defecto")
+            return "\n⚠ No tengo suficiente información.\n"
+
+        stack_str = " + ".join(self.estado.stack)
+
+        explicacion = []
+
+        if self.estado.escalabilidad == "alta":
+            explicacion.append("✔ Optimizado para alta escalabilidad")
+
+        if self.estado.tiempo == "corto":
+            explicacion.append("✔ Prioriza desarrollo rápido")
+
+        if self.estado.tamanio_equipo == "pequeno":
+            explicacion.append("✔ Adecuado para equipos pequeños")
+
+        explicacion_str = "\n".join(explicacion)
+
         return (
-            f"\n🚀 Recomendación:\n Arquitectura: {self.estado.arquitectura}\n Stack: {' + '.join(self.estado.stack)}\n Prioridad: {self.estado.prioridad}\n"
+            "\n==============================\n"
+            "RECOMENDACIÓN FINAL\n"
+            "==============================\n"
+            f"Arquitectura : {self.estado.arquitectura}\n"
+            f"Stack        : {stack_str}\n"
+            f"Prioridad    : {self.estado.prioridad}\n"
+            "\nJustificación:\n"
+            f"{explicacion_str}\n"
+            "==============================\n"
         )
