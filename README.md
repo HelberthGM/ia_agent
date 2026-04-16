@@ -5,7 +5,8 @@
 Puedes explorar las diferentes implementaciones del agente directamente en sus respectivas ramas:
 
   * 🔗 **[Agente Reactivo Simple](https://github.com/HelberthGM/ia_agent/tree/agente_reactivo_simple)**: Implementación basada en reglas directas de condición-acción.
-  * 🔗 **[Agente Basado en Modelos](https://github.com/HelberthGM/ia_agent/tree/agente-reactivo-modelos)**: Versión que incorpora un estado interno para manejar entornos con visibilidad parcial.
+  * 🔗 **[Agente Reactivo Basado en Modelos](https://github.com/HelberthGM/ia_agent/tree/agente-reactivo-modelos)**: Versión que incorpora un estado interno para manejar entornos con visibilidad parcial.
+  * 🔗 **[Agente Basado en Objetivos](https://github.com/HelberthGM/ia_agent/tree/agente_basado_objetivos)**: Implementación que utiliza búsqueda y planificación para alcanzar metas específicas.
 
 -----
 
