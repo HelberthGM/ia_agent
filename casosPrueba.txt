@@ -1,0 +1,86 @@
+Caso 1: Startup que necesita salir rápido
+Aplicación web para startup.
+Equipo pequeño.
+MVP rápido.
+Poco presupuesto.
+Muchos usuarios.
+
+Debería favorecer tecnologías rápidas de desarrollar como React, Node.js o Firebase.
+
+Caso 2: Sistema empresarial
+Aplicación web empresarial.
+Alto rendimiento.
+Equipo grande.
+No es urgente.
+Muchos usuarios.
+
+Debería inclinarse más por Spring Boot y PostgreSQL.
+
+Caso 3: Proyecto universitario sencillo
+Aplicación web.
+Proyecto simple.
+Equipo pequeño.
+Pocos usuarios.
+Poco presupuesto.
+
+Debería buscar simplicidad y bajo costo.
+
+Caso 4: Aplicación móvil corporativa
+Aplicación movil.
+Alto rendimiento.
+Muchos usuarios.
+Equipo grande.
+
+Aquí deberías ver si realmente cambia las recomendaciones o si siempre termina recomendando algo parecido.
+
+Caso 5: Objetivo velocidad
+Aplicación web.
+MVP.
+Rapido.
+Equipo pequeño.
+
+La prioridad debería ser:
+
+objetivo = "minimizar_tiempo"
+Caso 6: Objetivo escalabilidad
+Aplicación web.
+Muchos usuarios.
+Escalable.
+No es urgente.
+
+La prioridad debería ser:
+
+objetivo = "maximizar_escalabilidad"
+Caso 7: Restricciones contradictorias
+Aplicación web.
+Muchos usuarios.
+Poco presupuesto.
+Equipo pequeño.
+Rapido.
+
+Este caso es interesante para la exposición porque no existe una solución perfecta.
+
+Puedes decir:
+
+El agente debe balancear objetivos conflictivos. Alta escalabilidad suele requerir tecnologías más robustas, mientras que bajo presupuesto y rapidez favorecen tecnologías más simples.
+
+Caso 8: Entrada incompleta
+Necesito desarrollar un sistema para una empresa.
+
+Debería responder algo parecido a:
+
+No tengo suficiente información.
+¿Qué tipo de aplicación desea desarrollar?
+
+Esto demuestra que el agente reconoce estados incompletos.
+
+Caso 9: Prueba extrema
+Aplicación web empresarial.
+Alto rendimiento.
+Muchos usuarios.
+Equipo grande.
+No es urgente.
+Mucho presupuesto.
+Complejo.
+
+Si tu evaluación está funcionando bien, este debería producir el stack más "robusto" de todos.
